@@ -28,21 +28,25 @@ try {
 
       // only consider patients that have an ID & name & telecom
       if (id && name && telecom) {
-        console.log(`${name[0].given} ${name[0].family}`);
-
-        ////////////////
-        // finding just mobile and email below not working
-        ////////////////
-
-        // find the telecom for each patient
+        // get each telecom
         for (let t = 0; t < telecom.length; t++) {
           const contact = telecom[t];
-          console.log(contact);
-
-          // only work with patients that can recieve email and SMS
-          if ((contact.use = 'mobile' || 'email')) {
+          // only consider patients with telecom.use === "mobile"
+          // or telecom.system === "email"
+          if (
+            (contact.use && contact.use === 'mobile') ||
+            (contact.use && contact.system === 'email')
+          ) {
+            // output only those patients with email or mobile phone
+            // would be better if only printed name once
             console.log(
-              ` - ${contact.use}: ${contact.system}: ${contact.value}`
+              `${name[0].given} ${name[0].family}: ${contact.use} ${contact.system}: ${contact.value}`
+            );
+          } else {
+            // should throw error and res.status, etc. if not meet criteria above
+
+            console.log(
+              `${name[0].given} ${name[0].family}: need email or mobile phone`
             );
           }
         }
